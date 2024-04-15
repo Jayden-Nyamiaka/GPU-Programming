@@ -10,37 +10,77 @@ Question 1: Common Errors (20 points)
 1.1
 --------------------------------------------------------------------------------
 Issue: 
+int *a = 3;
+It attempts to assign an int to an int pointer when it should be assigning an 
+int address.
 
-Fix:
+Fix: 
+Replace 
+    int *a = 3;
+with
+    int three = 3;
+    int *a = &three;
 
 --------------------------------------------------------------------------------
 1.2
 --------------------------------------------------------------------------------
-Issue:
+Issue: 
+int *a, b;
+Variable a is an int pointer while variable b is an int, but it's treating b 
+like an int pointer. It seems it thought the * would apply to both a and b.
 
 Fix:
+Replace 
+    int *a, b;
+with 
+    int *a, *b;
 
 --------------------------------------------------------------------------------
 1.3
 --------------------------------------------------------------------------------
 Issue: 
+int i, *a = (int *) malloc(1000);
+For int pointer a, 1000 bytes are allocated when space is needed for 1000 ints.
 
 Fix:
+Replace
+    int i, *a = (int *) malloc(1000);
+with
+    int i, *a = (int *) malloc(1000 * sizeof(int));
 
 --------------------------------------------------------------------------------
 1.4
 --------------------------------------------------------------------------------
 Issue: 
+int **a = (int **) malloc(3 * sizeof (int *));
+The issue isn't really in the above line but with the 2D array creation. To 
+declare a 2D array using a double pointer, the memory for each row also must be 
+allocated.
 
 Fix:
-
+After
+    int **a = (int **) malloc(3 * sizeof (int *));
+add lines
+    for (int i = 0; i < 3; i++) {
+      a[i] = (int *) malloc(100 * sizeof(int));
+    }
+    
 --------------------------------------------------------------------------------
 1.5
 --------------------------------------------------------------------------------
 Issue:
+if (!a)
+The if statement condition above should evaluate to true if *a == 0, but a is 
+not being dereferenced to get the value stored at *a. With !a, the condition 
+evaliates to true as long as the pointer is not NULL, which is every run 
+because of scanf.
 
 Fix:
-
+Replace
+    if (!a)
+with 
+    if (!*a)
+    
 ================================================================================
 Question 2: Parallelization (30 points)
 ================================================================================
