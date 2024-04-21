@@ -5,13 +5,7 @@ Updated by: Loko Kung, 2018
 Due: Wednesday, April 11, 2018 - 3:00 PM
 
 Submission:
-Include your written answers in the supplied README file. Submit these answers,
-as well as your code, by e-mail to cs179.ta@gmail.com. Package your files in a
-standard archive format (e.g. zip, tar.gz, tar.bz2). Please use the following
-format for the subject line of the email:
-    [CS179 Lab n] FirstName LastName
-Example:
-    [CS179 Lab 1] Loko Kung
+Port files over to remote GPU machine at username@machine.domain.
 
 ================================================================================
 Question 1: Common Errors (20 points)
