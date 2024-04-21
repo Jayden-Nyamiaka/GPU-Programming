@@ -47,6 +47,23 @@ void test5() {
         printf("Value is 0\n");
 }
 
+void pad() {
+    uint blur_v_size = 4;
+    
+    for (uint thread_index = 0; thread_index < 10; thread_index++) {
+        uint max = blur_v_size;
+        if (blur_v_size > thread_index) {
+            max = thread_index + 1;
+        }
+        printf("Max: %u\n", max);
+        for (int j = 0; j < max; j++) {
+            printf("Idx: %u \t Access: %u\n", thread_index, thread_index - j);
+            gpu_out_data[thread_index] += gpu_raw_data[thread_index - j] * blur_v[j];
+        }
+    }
+    
+}
+
 int main() {
   printf("Scratch Work:\n");
   test1();
@@ -54,5 +71,6 @@ int main() {
   test3();
   test4();
   test5();
+  pad();
   return 0;
 }
