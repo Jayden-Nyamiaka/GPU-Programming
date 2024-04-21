@@ -12,7 +12,7 @@ CPP_FILES = src/blur.cpp
 # ------------------------------------------------------------------------------
 
 # CUDA Compiler and Flags
-CUDA_PATH = /usr/local/cuda
+CUDA_PATH = /usr
 CUDA_INC_PATH = $(CUDA_PATH)/include
 CUDA_BIN_PATH = $(CUDA_PATH)/bin
 CUDA_LIB_PATH = $(CUDA_PATH)/lib64
@@ -30,13 +30,7 @@ NVCC_FLAGS += -g -dc -Wno-deprecated-gpu-targets --std=c++11 \
              --expt-relaxed-constexpr
 NVCC_INCLUDE =
 NVCC_LIBS = 
-NVCC_GENCODES = -gencode arch=compute_30,code=sm_30 \
-		-gencode arch=compute_35,code=sm_35 \
-		-gencode arch=compute_50,code=sm_50 \
-		-gencode arch=compute_52,code=sm_52 \
-		-gencode arch=compute_60,code=sm_60 \
-		-gencode arch=compute_61,code=sm_61 \
-		-gencode arch=compute_61,code=compute_61
+NVCC_GENCODES = -gencode arch=compute_52,code=sm_52
 
 # CUDA Object Files
 CUDA_OBJ_FILES = $(notdir $(addsuffix .o, $(CUDA_FILES)))

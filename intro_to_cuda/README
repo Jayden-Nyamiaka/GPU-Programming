@@ -130,3 +130,19 @@ y[n] no longer rely on its previous terms.
 ================================================================================
 Question 3: Small-Kernel Convolution (50 points)
 ================================================================================
+Implemented in blur.cu
+To run and test code,
+    1) Port files over to remote GPU machine (or alternatively your own 
+       properly equipped GPU)
+        - Can be done via rsync -aP . username@machine.domain:lab1
+    2) In the machine environment, run make all
+    3) Then, run ls and confirm audio-blur and noaudio-blur files exists
+    4) Test noaudio-blur via ./noaudio-blur 512 200
+        - Make sure no "incorrect" statements print
+    5) Test audio-blur via 
+        - Run ./audio-blur 512 200 resources/example_test.wav output.wav
+        - Make sure no "incorrect" statements print
+        - Port output.wav to local machine via 
+            rsync -aP username@machine.domain:lab1/output.wav .
+        - Play output audio file to hear the effect of the transformation
+        
