@@ -5,6 +5,8 @@ Updated by: Loko Kung, 2018
 Due: Wednesday, April 10, 2024 - 3:00 PM
 
 Submission:
+Put all answers to conceptual questions in a file called README.me.
+Implement all code in the .cu files as directed in the instructions below.
 Port files over to remote GPU machine at username@machine.domain. 
 Also, put a zip file of your solution in your home directory on the 
 remote GPU machine, with the name lab[N]_2024_submission.zip.
