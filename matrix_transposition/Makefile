@@ -2,13 +2,13 @@ CC = /usr/bin/g++
 
 LD_FLAGS = -lrt
 
-CUDA_PATH       ?= /usr
+CUDA_PATH       ?= /usr/local/cuda
 CUDA_INC_PATH   ?= $(CUDA_PATH)/include
 CUDA_BIN_PATH   ?= $(CUDA_PATH)/bin
 CUDA_LIB_PATH   ?= $(CUDA_PATH)/lib64
 
 # CUDA code generation flags
-GENCODE_FLAGS = -gencode arch=compute_52,code=sm_52
+GENCODE_FLAGS = --gpu-architecture=sm_52 #-gencode arch=compute_52,code=sm_52
         
 # Common binaries
 NVCC            ?= $(CUDA_BIN_PATH)/nvcc
@@ -22,7 +22,7 @@ else
 		LDFLAGS   := -L$(CUDA_LIB_PATH) -lcudart
 		CCFLAGS   := -m32
 	else
-		CUDA_LIB_PATH := $(CUDA_LIB_PATH)64
+		CUDA_LIB_PATH := $(CUDA_LIB_PATH)
 		LDFLAGS       := -L$(CUDA_LIB_PATH) -lcudart
 		CCFLAGS       := -m64
 	endif
