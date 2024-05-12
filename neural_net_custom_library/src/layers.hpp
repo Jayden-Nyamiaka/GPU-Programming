@@ -11,7 +11,7 @@
 
 /**
  * Generic layer superclass. All other layers are subclasses of this one. Pure
- * virtual functions for the forwards and backwards pass must be implmented by
+ * virtual functions for the forwards and backwards pass must be implemented by
  * any subclass.
  */
 class Layer

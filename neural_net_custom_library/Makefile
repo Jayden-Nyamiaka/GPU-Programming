@@ -32,10 +32,7 @@ NVCC_FLAGS += -g -dc -Wno-deprecated-gpu-targets --std=c++11 \
 	      --expt-relaxed-constexpr -D THRUST_IGNORE_DEPRECATED_CPP_DIALECT
 NVCC_INCLUDE =
 NVCC_CUDA_LIBS = 
-NVCC_GENCODES = -gencode arch=compute_50,code=sm_50 \
-		-gencode arch=compute_52,code=sm_52 \
-		-gencode arch=compute_60,code=sm_60 \
-		-gencode arch=compute_61,code=sm_61
+NVCC_GENCODES = --gpu-architecture=sm_52
 
 # ------------------------------------------------------------------------------
 

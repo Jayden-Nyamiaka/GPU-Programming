@@ -1,9 +1,10 @@
 CS 179: GPU Computing
 Labs 5-6: Introduction to Machine Learning and cuDNN
 Written by: Aadyot Bhatnagar
+Name: Jayden Nyamiaka
 
-Due: Wednesday, May 8, 2019 @ 3pm (Lab 5)
-     Wednesday, May 15, 2019 @ 3pm (Lab 6)
+Due: Wednesday, May 8, 2024 @ 3pm (Lab 5)
+     Wednesday, May 15, 2024 @ 3pm (Lab 6)
 
 Submission:
 --------------------------------------------------------------------------------
@@ -11,11 +12,11 @@ Submission:
 Instead of emailing us the solution, put a zip file in your home directory
 on Titan, in the format:
 
-lab5_2019_submission.zip
+lab5_2024_submission.zip
 
 and
 
-lab6_2019_submission.zip
+lab6_2024_submission.zip
 
 Your submission for each lab should be a single archive file (.zip)
 with your README file and all code.
@@ -28,6 +29,12 @@ option for you. If you are running this on your own machine, you can download
 the dataset yourself from http://yann.lecun.com/exdb/mnist/ and just put all 4
 of the files into a single directory, which you should specify using the --dir
 command line argument when running the executable.
+
+Files within the /srv/cs179_mnist directory as of now:
+    - test-images.idx3-ubyte
+    - test-labels.idx1-ubyte
+    - train-images.idx3-ubyte
+    - train-labels.idx1-ubyte
 
 To set up cuDNN on your own, create an NVIDIA developer account and visit
 https://developer.nvidia.com/cudnn. Then, download the most recent release

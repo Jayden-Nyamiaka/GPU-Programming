@@ -12,7 +12,7 @@
 #include <algorithm>
 #include "helper_cuda.h"
 
-// CUDA block width
+// CUDA block width (number of threads per block)
 #define BW 1024
 
 /**
@@ -27,6 +27,8 @@ template<typename T> void cudaMemsetType(T *dev_ptr, T val, int n_vals)
 /**
  * Invokes a CUDA kernel to compute the average cross entropy between softmaxed
  * predictions pred_Y and ground truth true_Y.
+ *
+ * Note: Both pred_Y and true_Y are stored in GPU memory.
  *
  * @param pred_Y predictions made by model (probability vectors)
  * @param true_Y true output values (one-hot vectors)
@@ -46,7 +48,10 @@ float CrossEntropyLoss(float* pred_Y, float* true_Y, int n, int c, int h, int w)
 
     // Accumulate the total loss on the device by invoking a kernel
     int n_blocks = std::min(65535, (n * c * h * w + BW  - 1) / BW);
-    // TODO (set 5): call CrossEntropyKernel
+
+    // DONE (set 5): call CrossEntropyKernel
+    CrossEntropyKernel<<<n_blocks, BW, BW * sizeof(float)>>>(
+        pred_Y, true_Y, d_loss, n, c, h, w);
 
     // Copy back the accumulated loss on the device back to the host
     CUDA_CALL( cudaMemcpy(&loss, d_loss, sizeof(float), cudaMemcpyDeviceToHost) );
@@ -102,13 +107,45 @@ __global__ void CrossEntropyKernel(float* pred_Y, float* true_Y, float *loss,
 {
     extern __shared__ float shmem[];
 
-    // TODO (set 5): use a parallel reduction to compute cross-entropy between
+    // DONE (set 5): use a parallel reduction to compute cross-entropy between
     //               pred_Y and true_Y, i.e. -sum( log(pred_Y[i]) * true_Y[i] ),
     //               where i ranges from 0 to (n*c*h*w) - 1
+    const unsigned int size = n * c * h * w;
 
-    // atomically add the accumulated loss per block into the global accumulator
-    if (threadIdx.x == 0)
-        atomicAdd(loss, shmem[0] / static_cast<float>(n));
+    unsigned int tid = threadIdx.x;
+    unsigned int i = blockIdx.x * blockDim.x*2 + threadIdx.x;
+
+    // First step of reduction
+    // Each thread reads (and compares) 2 values from global to shmem
+    while (i < size) {
+        shmem[tid] = -1.0 * log(pred_Y[i]) * true_Y[i];
+        if (i + blockDim.x < size) 
+            shmem[tid] -= log(pred_Y[i + blockDim.x]) * true_Y[i + blockDim.x];
+        __syncthreads();
+
+        // Implements binary tree parallel reduction using sequential addressing
+        for (unsigned int s = blockDim.x/2; s > 32; s >>= 1) {
+            if (tid < s) {
+                shmem[tid] += shmem[tid + s];
+            }
+            __syncthreads();
+        }
+
+        // Unrolls the last few computations of the loop
+        if(tid < 32) shmem[tid] += shmem[tid + 32];
+        if(tid < 16) shmem[tid] += shmem[tid + 16];
+        if(tid < 8)  shmem[tid] += shmem[tid +  8];
+        if(tid < 4)  shmem[tid] += shmem[tid +  4];
+        if(tid < 2)  shmem[tid] += shmem[tid +  2];
+        if(tid < 1)  shmem[tid] += shmem[tid +  1];
+
+        // Atomically add the accumulated loss per block into the global accumulator
+        if (tid == 0) atomicAdd(loss, shmem[0] / static_cast<float>(n));
+        
+        // Move to next set of blocks
+        i += blockDim.x * gridDim.x;
+    }
+    
 }
 
 /**
